@@ -24,9 +24,16 @@
         android:layout_below="@+id/edittext"
         android:onClick="startSubactivity"/>
     <Button
+        android:id="@+id/button2"
         android:layout_below="@id/button1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Start ListViewActivity"
         android:onClick="startListViewActivity"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/button2"
+        android:text="Start ScrollViewActivity"
+        android:onClick="startScrollViewActivity"/>
 </RelativeLayout>
