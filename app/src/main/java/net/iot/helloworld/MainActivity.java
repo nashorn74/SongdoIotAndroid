@@ -48,6 +48,13 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(intent, 1);
     }
 
+    public void startListViewActivity(View view) {
+        Intent intent = new Intent(
+                MainActivity.this,
+                ListViewActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     protected void onActivityResult(
             int requestCode, int resultCode, Intent data) {
