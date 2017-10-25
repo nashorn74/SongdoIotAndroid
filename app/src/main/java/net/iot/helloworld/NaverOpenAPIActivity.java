@@ -65,6 +65,23 @@ public class NaverOpenAPIActivity extends AppCompatActivity {
             postdateText.setText(itemList.get(position).postdate);
             descriptionText.setText(Html.fromHtml(itemList.get(position).description));
             bloggernameText.setText(itemList.get(position).bloggername);
+            final int pos = position;
+            titleText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW,
+                            Uri.parse(itemList.get(pos).link));
+                    startActivity(intent);
+                }
+            });
+            bloggernameText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(Intent.ACTION_VIEW,
+                            Uri.parse(itemList.get(pos).bloggerlink));
+                    startActivity(intent);
+                }
+            });
             return view;
         }
     }
@@ -142,7 +159,7 @@ public class NaverOpenAPIActivity extends AppCompatActivity {
                 BlogAdapter adapter = new BlogAdapter(NaverOpenAPIActivity.this);
                 ListView listView = (ListView)findViewById(R.id.listview);
                 listView.setAdapter(adapter);
-                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                /*listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Log.i("link",itemList.get(position).link);
@@ -150,7 +167,7 @@ public class NaverOpenAPIActivity extends AppCompatActivity {
                                 Uri.parse(itemList.get(position).link));
                         startActivity(intent);
                     }
-                });
+                });*/
             } catch (Exception e) { e.printStackTrace(); }
         }
     }
