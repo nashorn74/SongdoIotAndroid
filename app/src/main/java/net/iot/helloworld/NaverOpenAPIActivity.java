@@ -1,12 +1,25 @@
 package net.iot.helloworld;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.annotation.LayoutRes;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -17,8 +30,44 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 
 public class NaverOpenAPIActivity extends AppCompatActivity {
+    class Item {//데이터 저장용 클래스
+        String title; String link; String description;
+        String bloggername; String bloggerlink; String postdate;
+        Item(String title, String link, String description,
+             String bloggername, String bloggerlink, String postdate) {
+            this.title = title; this.link = link; this.description = description;
+            this.bloggername = bloggername; this.bloggerlink = bloggerlink;
+            this.postdate = postdate;
+        }
+    }
+    ArrayList<Item> itemList = new ArrayList<Item>();
+    class BlogAdapter extends ArrayAdapter {
+        public BlogAdapter(Context context) {
+            super(context, R.layout.list_blog_item, itemList);
+        }
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            View view = null;
+            if (convertView == null) {
+                LayoutInflater inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
+                view = inflater.inflate(R.layout.list_blog_item, null);//XML -> View 객체로 변환
+            } else {
+                view = convertView;//기존에 변환된 View 객체 재활용
+            }
+            TextView titleText = (TextView)view.findViewById(R.id.title);
+            TextView postdateText = (TextView)view.findViewById(R.id.postdate);
+            TextView descriptionText = (TextView)view.findViewById(R.id.description);
+            TextView bloggernameText = (TextView)view.findViewById(R.id.bloggername);
+            titleText.setText(Html.fromHtml(itemList.get(position).title));
+            postdateText.setText(itemList.get(position).postdate);
+            descriptionText.setText(Html.fromHtml(itemList.get(position).description));
+            bloggernameText.setText(itemList.get(position).bloggername);
+            return view;
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,18 +127,30 @@ public class NaverOpenAPIActivity extends AppCompatActivity {
                 //JSON 문자열 -> JSON 객체로 변환
                 JSONObject json = new JSONObject(s);
                 //JSON 객체에서 items 키값의 배열을 추출 --> 여기에만 해당
-                JSONArray items = json.getJSONArray("items");
+                final JSONArray items = json.getJSONArray("items");
+                itemList.clear();//동적배열 초기화
                 for (int i = 0; i < items.length(); i++) {//items 배열 안의 객체 정보 개별 추출
                     JSONObject obj = items.getJSONObject(i);
                     String title = obj.getString("title");
                     String link = obj.getString("link");
                     String description = obj.getString("description");
                     String bloggername = obj.getString("bloggername");
+                    String bloggerlink = obj.getString("bloggerlink");
                     String postdate = obj.getString("postdate");
-                    Log.i("title", title);
+                    itemList.add(new Item(title, link, description, bloggername, bloggerlink, postdate));
                 }
-                int display = json.getInt("display");
-                //Toast.makeText(NaverOpenAPIActivity.this, items.length()+"", Toast.LENGTH_LONG).show();
+                BlogAdapter adapter = new BlogAdapter(NaverOpenAPIActivity.this);
+                ListView listView = (ListView)findViewById(R.id.listview);
+                listView.setAdapter(adapter);
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Log.i("link",itemList.get(position).link);
+                        Intent intent = new Intent(Intent.ACTION_VIEW,
+                                Uri.parse(itemList.get(position).link));
+                        startActivity(intent);
+                    }
+                });
             } catch (Exception e) { e.printStackTrace(); }
         }
     }
