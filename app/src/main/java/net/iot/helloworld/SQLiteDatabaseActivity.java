@@ -35,6 +35,12 @@ public class SQLiteDatabaseActivity extends AppCompatActivity {
         definitionText.setText("");
     }
 
+    public void removeDatabase(int _id) {
+        Dictionary dictionary = new Dictionary(SQLiteDatabaseActivity.this);
+        SQLiteDatabase db = dictionary.getWritableDatabase();
+        String[] args = {_id+""};
+        db.delete(Dictionary.TABLE_NAME, "_id = ?", args);
+    }
     public void writeDatabase(String word, String definition) {
         Dictionary dictionary = new Dictionary(SQLiteDatabaseActivity.this);
         SQLiteDatabase db = dictionary.getWritableDatabase();
@@ -82,9 +88,17 @@ public class SQLiteDatabaseActivity extends AppCompatActivity {
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                final int pos = position;//!!!!!!!!!
                 AlertDialog.Builder dialog = new AlertDialog.Builder(SQLiteDatabaseActivity.this);
                 dialog.setMessage("해당 데이터를 삭제하시겠습니까?");
                 dialog.setPositiveButton("예", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        removeDatabase(vocaList.get(pos)._id);
+                        readDatabase();
+                    }
+                });
+                dialog.setNegativeButton("아니오", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {}
                 });
