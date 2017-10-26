@@ -57,7 +57,7 @@ public class GoogleMapActivity extends AppCompatActivity  {
         @Override
         public void onLocationChanged(Location location) {
             String message = "Current location - lat:"+location.getLatitude()+
-                    ", long:"+location.getLongitude();
+                    ", long:"+location.getLongitude()+", speed:"+location.getSpeed();
             Toast.makeText(GoogleMapActivity.this, message, Toast.LENGTH_SHORT).show();
         }
         @Override

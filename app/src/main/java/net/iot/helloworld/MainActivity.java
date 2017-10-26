@@ -88,6 +88,12 @@ public class MainActivity extends AppCompatActivity {
                 GoogleMapActivity.class);
         startActivity(intent);
     }
+    public void startSQLiteDatabaseActivity(View view) {
+        Intent intent = new Intent(
+                MainActivity.this,
+                SQLiteDatabaseActivity.class);
+        startActivity(intent);
+    }
 
     @Override
     protected void onActivityResult(
