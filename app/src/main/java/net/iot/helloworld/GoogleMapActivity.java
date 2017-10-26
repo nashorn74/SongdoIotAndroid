@@ -53,13 +53,19 @@ public class GoogleMapActivity extends AppCompatActivity  {
         } catch(Exception e) { e.printStackTrace(); }
         startLocationService();
     }
-    class GPSListener implements LocationListener {
+    class GPSListener implements android.location.LocationListener {
         @Override
         public void onLocationChanged(Location location) {
             String message = "Current location - lat:"+location.getLatitude()+
                     ", long:"+location.getLongitude();
             Toast.makeText(GoogleMapActivity.this, message, Toast.LENGTH_SHORT).show();
         }
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {}
+        @Override
+        public void onProviderEnabled(String provider) {}
+        @Override
+        public void onProviderDisabled(String provider) {}
     }
     private void startLocationService() {
         LocationManager manager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
@@ -73,7 +79,9 @@ public class GoogleMapActivity extends AppCompatActivity  {
         } catch (SecurityException e) { e.printStackTrace(); }
         GPSListener gpsListener = new GPSListener();
         long time = 10000; float dist = 0;
-        manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, time, dist, gpsListener);
+        try {
+            manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, time, dist, gpsListener);
+        } catch (SecurityException e) { e.printStackTrace(); }
     }
 
 }
