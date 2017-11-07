@@ -12,15 +12,27 @@ import android.widget.Toast;
 import java.util.List;
 
 public class SensorMonitorActivity extends AppCompatActivity implements SensorEventListener {
+    SensorManager manager = null;
+    List<Sensor> sensors = null;
+    int position = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sensor_monitor);
-        SensorManager manager = (SensorManager)getSystemService(SENSOR_SERVICE);
-        List<Sensor> sensors = manager.getSensorList(Sensor.TYPE_ALL);
+        manager = (SensorManager)getSystemService(SENSOR_SERVICE);
+        sensors = manager.getSensorList(Sensor.TYPE_ALL);
         Intent intent = getIntent();
-        int position = intent.getIntExtra("position", 0);
+        position = intent.getIntExtra("position", 0);
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
         manager.registerListener(this, sensors.get(position), SensorManager.SENSOR_DELAY_UI);
+    }
+    @Override
+    protected void onPause() {
+        manager.unregisterListener(this);
+        super.onPause();
     }
     @Override
     public void onSensorChanged(SensorEvent event) {
