@@ -5,16 +5,75 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="net.iot.helloworld.ArduinoActivity">
-    <Button
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="BUZZER ON"
-        android:onClick="clickBuzzerOnButton"/>
-    <Button
+        android:orientation="horizontal">
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="50"
+            android:text="BUZZER ON"
+            android:onClick="clickBuzzerOnButton"/>
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="50"
+            android:text="BUZZER OFF"
+            android:onClick="clickBuzzerOffButton"/>
+    </LinearLayout>
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="BUZZER OFF"
-        android:onClick="clickBuzzerOffButton"/>
+        android:orientation="horizontal">
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="50"
+            android:text="RED LED ON"
+            android:onClick="clickRedLEDOnButton"/>
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="50"
+            android:text="RED LED OFF"
+            android:onClick="clickRedLEDOffButton"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="50"
+            android:text="YELLOW LED ON"
+            android:onClick="clickYellowLEDOnButton"/>
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="50"
+            android:text="YELLOW LED OFF"
+            android:onClick="clickYellowLEDOffButton"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="50"
+            android:text="GREEN LED ON"
+            android:onClick="clickGreenLEDOnButton"/>
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="50"
+            android:text="GREEN LED OFF"
+            android:onClick="clickGreenLEDOffButton"/>
+    </LinearLayout>
+
     <Spinner
         android:id="@+id/spinner"
         android:layout_width="match_parent"

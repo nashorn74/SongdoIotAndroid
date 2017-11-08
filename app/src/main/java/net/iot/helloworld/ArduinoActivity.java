@@ -126,10 +126,28 @@ public class ArduinoActivity extends AppCompatActivity {
     }
 
     public void clickBuzzerOnButton(View view) {
-        new SendBuzzerFlag().execute("on");
+        new SendBuzzerFlag().execute("buzzer","on");
     }
     public void clickBuzzerOffButton(View view) {
-        new SendBuzzerFlag().execute("off");
+        new SendBuzzerFlag().execute("buzzer","off");
+    }
+    public void clickRedLEDOnButton(View view) {
+        new SendBuzzerFlag().execute("led/red","on");
+    }
+    public void clickRedLEDOffButton(View view) {
+        new SendBuzzerFlag().execute("led/red","off");
+    }
+    public void clickYellowLEDOnButton(View view) {
+        new SendBuzzerFlag().execute("led/yellow","on");
+    }
+    public void clickYellowLEDOffButton(View view) {
+        new SendBuzzerFlag().execute("led/yellow","off");
+    }
+    public void clickGreenLEDOnButton(View view) {
+        new SendBuzzerFlag().execute("led/green","on");
+    }
+    public void clickGreenLEDOffButton(View view) {
+        new SendBuzzerFlag().execute("led/green","off");
     }
     class SendBuzzerFlag extends AsyncTask<String, String, String> {
         ProgressDialog dialog = new ProgressDialog(ArduinoActivity.this);
@@ -137,7 +155,7 @@ public class ArduinoActivity extends AppCompatActivity {
         protected String doInBackground(String... params) {
             StringBuffer response = new StringBuffer();
             try {
-                String urlString = "http://192.168.0.35:3000/devices/buzzer/"+params[0];
+                String urlString = "http://192.168.0.35:3000/devices/"+params[0]+"/"+params[1];
                 URL url = new URL(urlString);
                 HttpURLConnection con = (HttpURLConnection)url.openConnection();
                 con.setRequestMethod("POST");
