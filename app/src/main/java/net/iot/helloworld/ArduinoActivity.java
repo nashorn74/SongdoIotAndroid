@@ -11,8 +11,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -32,6 +34,20 @@ public class ArduinoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_arduino);
 
+        final String sensors[] = { "dht11", "mq2" };
+        ArrayAdapter<String> spinnerAdapter =
+                new ArrayAdapter<String>(ArduinoActivity.this,
+                        android.R.layout.simple_spinner_item, sensors);
+        Spinner spinner = (Spinner)findViewById(R.id.spinner);
+        spinner.setAdapter(spinnerAdapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                new LoadSensorLogs().execute("arduino", sensors[position]);
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
         new LoadSensorLogs().execute("arduino", "dht11");
     }
     class Item {
@@ -94,8 +110,13 @@ public class ArduinoActivity extends AppCompatActivity {
                 items.clear();
                 for (int i = 0; i < array.length(); i++) {
                     JSONObject obj = array.getJSONObject(i);
-                    items.add(new Item(obj.getInt("temp"), obj.getInt("humidity"),
-                            obj.getString("created_at")));
+                    if (obj.getString("sensor").equals("dht11")) {
+                        items.add(new Item(obj.getInt("temp"), obj.getInt("humidity"),
+                                obj.getString("created_at")));
+                    } else {
+                        items.add(new Item(obj.getInt("digital"), obj.getInt("analog"),
+                                obj.getString("created_at")));
+                    }
                 }
                 ItemAdapter adapter = new ItemAdapter(ArduinoActivity.this);
                 ListView listView = (ListView)findViewById(R.id.listview);
